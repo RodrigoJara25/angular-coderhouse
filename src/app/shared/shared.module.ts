@@ -21,6 +21,8 @@ import { HighlighterDirective } from './directives/highlighter.directive';
 import { RepeatDirective } from './directives/repeat.directive';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { FontSizeDirective } from './directives/font-size.directive';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { RouterModule } from '@angular/router';
     FullNamePipe,
     ConversorPipe,
     HighlighterDirective,
-    RepeatDirective
+    RepeatDirective,
+    ToolbarComponent,
+    FontSizeDirective
   ],
   imports: [
     CommonModule,
@@ -63,6 +67,7 @@ import { RouterModule } from '@angular/router';
     MatCardModule,
     MatDialogModule,
     RouterModule,
+    ToolbarComponent,
     FullNamePipe,   // Esta es la declaracion del Pipe
     ConversorPipe,  // Exportamos el Pipe
     HighlighterDirective,   // Exportar Directiva
