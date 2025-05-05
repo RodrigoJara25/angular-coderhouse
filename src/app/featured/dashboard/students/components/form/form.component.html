@@ -1,0 +1,28 @@
+<!-- {{ courseTitles  | async }} -->
+
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+    <div class="form-row">
+        <mat-form-field>
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName">
+        </mat-form-field>
+    </div>
+    <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Course</mat-label>
+        <mat-select formControlName="course">
+            <mat-option *ngFor="let course of courseNames" [value]="course.toLowerCase()">{{course}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit">
+        Add Student
+    </button>
+</form>

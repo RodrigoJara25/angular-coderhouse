@@ -1,0 +1,12 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+}
+
+.form-row {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
