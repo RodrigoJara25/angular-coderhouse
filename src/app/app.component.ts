@@ -8,7 +8,7 @@ import { delay, forkJoin, from, interval, Observable, of } from 'rxjs';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'clase-10';
+  title = 'proyecto-angular';
   showFiller = false;
   showStudents = true;
 

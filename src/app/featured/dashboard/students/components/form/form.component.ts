@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { filter, map, Observable, tap } from 'rxjs';
-import { APP_CONFIG, AppConfig } from '../../../../../core/injection-token';
 import { StudentsService } from '../../../../../core/services/students.service';
 import { CourseService } from '../../../../../core/services/course.service';
 import { DialogComponent } from '../../../../../shared/components/dialog/dialog.component';
@@ -23,13 +22,11 @@ export class FormComponent {
   constructor(
     private fb: FormBuilder, 
     private matDialog: MatDialog, 
-    @Inject(APP_CONFIG) private config: AppConfig, 
     private studentsService: StudentsService,
     private courseService: CourseService,
   ) {
 
     // imprimos le valor de config
-    console.log(config);
 
     this.formGroup = this.fb.group({
       firstName: [''],
