@@ -6,15 +6,16 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { FormComponent } from './components/form/form.component';
 import { TableComponent } from './components/table/table.component';
 
-import { config } from 'rxjs';
 import { StudentsComponent } from './students.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { EditStudentsComponent } from './components/edit-students/edit-students.component';
 
 @NgModule({
   declarations: [
     FormComponent,
     TableComponent,
-    StudentsComponent
+    StudentsComponent,
+    EditStudentsComponent
   ],
   imports: [
     CommonModule,

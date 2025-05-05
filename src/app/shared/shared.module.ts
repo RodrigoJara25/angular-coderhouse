@@ -10,7 +10,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
 import { DialogComponent } from './components/dialog/dialog.component';
@@ -68,10 +68,12 @@ import { FontSizeDirective } from './directives/font-size.directive';
     MatDialogModule,
     RouterModule,
     ToolbarComponent,
+    SidebarComponent,
     FullNamePipe,   // Esta es la declaracion del Pipe
     ConversorPipe,  // Exportamos el Pipe
     HighlighterDirective,   // Exportar Directiva
     RepeatDirective,  // Exportar Directiva Estructural
+    FormsModule,
   ]
 })
 export class SharedModule { }
