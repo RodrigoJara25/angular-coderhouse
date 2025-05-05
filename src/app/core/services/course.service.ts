@@ -65,4 +65,23 @@ export class CourseService {
             }
         });
     }
+
+    updateCourse(updatedCourse: Course): void {
+        const index = this._courses.findIndex(
+            (course) => course.title.toLowerCase() === updatedCourse.title.toLowerCase()
+        );
+        if (index !== -1) {
+            this._courses[index] = updatedCourse; // Actualizamos el curso
+            this.coursesSubject.next([...this._courses]); // Emitimos los cambios
+            this.coursesTitlesSubject.next(this._courses.map((course) => course.title)); // Actualizamos los títulos
+        }
+    }
+
+    deleteCourse(courseToDelete: Course): void {
+        this._courses = this._courses.filter(
+            (course) => course.title.toLowerCase() !== courseToDelete.title.toLowerCase()
+        );
+        this.coursesSubject.next([...this._courses]); // Emitimos los cambios
+        this.coursesTitlesSubject.next(this._courses.map((course) => course.title)); // Actualizamos los títulos
+    }
 }

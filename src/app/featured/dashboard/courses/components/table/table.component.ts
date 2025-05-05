@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Course } from '../../interfaces/Course';
 import { CourseService } from '../../../../../core/services/course.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditCoursesComponent } from '../edit-courses/edit-courses.component';
 
 
 @Component({
@@ -16,11 +18,12 @@ export class TableComponent implements OnInit {
     'title',
     'description',
     'see-more',
+    'actions'
   ];
   dataSource: Course[] = [];
 
   // Llamamos y usamos el servicio que contiene el array de estudiantes
-  constructor(private courseService: CourseService) {
+  constructor(private courseService: CourseService, private dialog: MatDialog) {
     // this.dataSource = this.studentsService.getStudents();
   }
 
@@ -32,4 +35,21 @@ export class TableComponent implements OnInit {
       this.dataSource = data;
     });
   }
+
+  editCourse(course: Course) {
+    const dialogRef = this.dialog.open(EditCoursesComponent, {
+        width: '400px',
+        data: { ...course } // Pasamos una copia del curso
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+            this.courseService.updateCourse(result); // Actualizar en el servicio
+        }
+    });
+  }
+
+  deleteCourse(course: Course) {
+    this.courseService.deleteCourse(course); // Eliminar en el servicio
+}
 }

@@ -56,5 +56,22 @@ export class StudentsService {
     this.dataSubject.next(this._students);
   }
 
+  updateStudent(updatedStudent: Student): void {
+    const index = this._students.findIndex(
+      (student) => student.email.toLowerCase() === updatedStudent.email.toLowerCase()
+    );
+    if (index !== -1) {
+      this._students[index] = updatedStudent; // Actualizamos el estudiante
+      this.dataSubject.next([...this._students]); // Emitimos los cambios
+    }
+  }
+
+  deleteStudent(studentToDelete: Student): void {
+    this._students = this._students.filter(
+      (student) => student.email.toLowerCase() !== studentToDelete.email.toLowerCase()
+    );
+    this.dataSubject.next([...this._students]); // Emitimos los cambios
+  }
+
   constructor() { }
 }

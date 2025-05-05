@@ -6,6 +6,7 @@ import { FormComponent } from './components/form/form.component';
 import { CoursesComponent } from './courses.component';
 import { DetailsComponent } from './pages/details/details.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { EditCoursesComponent } from './components/edit-courses/edit-courses.component';
 
 
 
@@ -15,13 +16,14 @@ import { SharedModule } from '../../../shared/shared.module';
     FormComponent,
     CoursesComponent,
     DetailsComponent,
+    EditCoursesComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
   ],
   exports: [
-    CoursesComponent
+    CoursesComponent,
   ]
 })
 export class CoursesModule { }

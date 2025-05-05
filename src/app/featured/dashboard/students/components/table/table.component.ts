@@ -45,6 +45,25 @@ export class TableComponent implements OnInit {
       .catch((error) => console.log(error));
   }
 
+  // editStudent(student: Student) {
+  //   const dialogRef = this.dialog.open(EditStudentsComponent, {
+  //     width: '400px',
+  //     data: { ...student } // Pasamos una copia del estudiante
+  //   });
+  
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       // Actualizamos el estudiante en el dataSource
+  //       const index = this.dataSource.findIndex(
+  //         (s) => s.firstName === student.firstName && s.email === student.email
+  //       );
+  //       if (index !== -1) {
+  //         this.dataSource[index] = result;
+  //         this.dataSource = [...this.dataSource]; // Refrescamos la tabla
+  //       }
+  //     }
+  //   });
+  // }
   editStudent(student: Student) {
     const dialogRef = this.dialog.open(EditStudentsComponent, {
       width: '400px',
@@ -53,20 +72,16 @@ export class TableComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Actualizamos el estudiante en el dataSource
-        const index = this.dataSource.findIndex(
-          (s) => s.firstName === student.firstName && s.email === student.email
-        );
-        if (index !== -1) {
-          this.dataSource[index] = result;
-          this.dataSource = [...this.dataSource]; // Refrescamos la tabla
-        }
+        this.studentsService.updateStudent(result); // Actualizar en el servicio
       }
     });
   }
 
+  // deleteStudent(student: Student) {
+  //   this.dataSource = this.dataSource.filter((s) => s.firstName !== student.firstName || s.email !== student.email);
+  // }
   deleteStudent(student: Student) {
-    this.dataSource = this.dataSource.filter((s) => s.firstName !== student.firstName || s.email !== student.email);
+    this.studentsService.deleteStudent(student); // Eliminar en el servicio
   }
 
 }
