@@ -2,6 +2,11 @@
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
-    <span>Rodrigo Jara</span>
+    <span *ngIf="userName$ | async as userName; else loading">
+        Bienvenido, {{ userName }}
+    </span>
+    <ng-template #loading>
+        Cargando usuario...
+    </ng-template>
     <span class="example-spacer"></span>
 </mat-toolbar>
