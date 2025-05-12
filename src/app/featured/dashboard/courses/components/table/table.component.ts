@@ -15,6 +15,7 @@ export class TableComponent implements OnInit {
 
   // componentes de la tabla
   displayedColumns: string[] = [
+    'id',
     'title',
     'description',
     'see-more',
@@ -30,26 +31,32 @@ export class TableComponent implements OnInit {
   // enviamos los datos, por medio del observable, al que este suscrito
   ngOnInit(): void {
     this.courseService.getCourses();
-    this.courseService.courses$.subscribe((data)=>{
-      console.log(data);
-      this.dataSource = data;
+    this.courseService.courses$.subscribe({
+      next: (data) => {
+        console.log(data);
+        this.dataSource = data;
+      },
+      error: (error) => {
+        console.error('Error al obtener los cursos:', error);
+      }
     });
   }
 
-  editCourse(course: Course) {
-    const dialogRef = this.dialog.open(EditCoursesComponent, {
-        width: '400px',
-        data: { ...course } // Pasamos una copia del curso
-    });
+  editCourse(id: string) {
+    // const dialogRef = this.dialog.open(EditCoursesComponent, {
+    //     width: '400px',
+    //     data: { ...course } // Pasamos una copia del curso
+    // });
 
-    dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-            this.courseService.updateCourse(result); // Actualizar en el servicio
-        }
-    });
+    // dialogRef.afterClosed().subscribe((result) => {
+    //     if (result) {
+    //         this.courseService.setUpdateCourse(result);
+    //     }
+    // });
+    this.courseService.setUpdateCourse(id); // Enviamos el id del curso a editar
   }
 
-  deleteCourse(course: Course) {
-    this.courseService.deleteCourse(course); // Eliminar en el servicio
+  deleteCourse(id: string) {
+    this.courseService.deleteCourse(id); // Eliminar en el servicio
 }
 }

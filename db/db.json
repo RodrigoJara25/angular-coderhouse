@@ -1,0 +1,70 @@
+{
+  "users": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "email": "rodrigo@gmail.com",
+      "password": "1234",
+      "role": "admin"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "email": "sofi@gmail.com",
+      "password": "1234",
+      "role": "user"
+    }
+  ],
+  "courses": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "title": "React 19",
+      "description": "React es una libreria para construir interfaces de usuario"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440004",
+      "title": "Vue 15",
+      "description": "Vue es una libreria para construir interfaces de usuario"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440005",
+      "title": "Svelte Kit",
+      "description": "Svelte es una libreria para construir interfaces de usuario"
+    },
+    {
+      "id": "0a68c54a-eef8-46ca-9ff5-4716f7f8575c",
+      "title": "Angular 19",
+      "description": "Angular el mejor framewokr de front-end"
+    },
+    {
+      "id": "17fbeaa2-344d-4ef5-a974-72b68db84c7a",
+      "title": "Next Js",
+      "description": "Framework para creacion y optimizacion de paginas web"
+    },
+    {
+      "id": "548a057c-13a6-425d-972d-b07215a1a39d",
+      "title": "Nest Js",
+      "description": "Nest Js, alto framework de backend"
+    },
+    {
+      "id": "d10cfc02-350c-4f5c-b420-5bc2577742fa",
+      "title": "Node js",
+      "description": "Curso de Node.js con Typescript y Express"
+    }
+  ],
+  "students": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440006",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@gmail.com",
+      "course": "angular",
+      "createdAt": "2024-02-25"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440007",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane@gmail.com",
+      "course": "react"
+    }
+  ]
+}

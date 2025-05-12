@@ -11,6 +11,7 @@ import { StudentsModule } from './featured/dashboard/students/students.module';
 import { CoursesModule } from './featured/dashboard/courses/courses.module';
 import { DashboardModule } from './featured/dashboard/dashboard.module';
 import { AuthModule } from './featured/auth/auth.module';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 
 
@@ -28,7 +29,9 @@ import { AuthModule } from './featured/auth/auth.module';
     DashboardModule,
     AuthModule,
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(withFetch())
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

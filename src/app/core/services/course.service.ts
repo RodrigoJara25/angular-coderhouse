@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { Course } from "../../featured/dashboard/courses/interfaces/Course";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment.development";
 
 @Injectable({
     providedIn: 'root',
@@ -17,30 +19,21 @@ export class CourseService {
     private coursesTitlesSubject = new BehaviorSubject<string[]>([]);
     coursesTitles$ = this.coursesTitlesSubject.asObservable();
 
-    // Fuente de datos (array de cursos)
-    private _courses: Course[] = [
-        {
-            title: 'Angular',
-            description: 'Angular es un framework para construir aplicaciones web',
-        },
-        {
-            title: 'React',
-            description: 'React es una libreria para construir interfaces de usuario',
-        },
-        {
-            title: 'Vue',
-            description: 'Vue es una libreria para construir interfaces de usuario',
-        },
-        {
-            title: 'Svelte',
-            description: 'Svelte es una libreria para construir interfaces de usuario',
-        },
-    ];
+    courseEdit = new BehaviorSubject<Course | null>(null);
+    courseEdit$ = this.courseEdit.asObservable();
 
-    getCourses(): void {
-        // No se puede usar el observable para enviiar ifnormacion, ya que los observable solo escuchan la informacion
-        // this.dataSubject.next(this._courses);
+    constructor(private http: HttpClient) {}
+
+    // Fuente de datos (array de cursos)
+    private _courses: Course[] = [];
+
+    getCourses() {
         this.coursesSubject.next(this._courses);
+        this.http.get<Course[]>(`${environment.apiUrl}/courses`).subscribe((courses) => {
+            this._courses = courses;
+            this.coursesSubject.next(this._courses);
+            this.coursesTitlesSubject.next(this._courses.map((course) => course.title));
+        });
     }
 
     getCoursesTitles(): void {
@@ -49,9 +42,17 @@ export class CourseService {
     }
 
     addCourse(course: Course): void {
-        this._courses = [...this._courses, course];
-        this.coursesSubject.next(this._courses);
-        this.coursesTitlesSubject.next(this._courses.map((course)=> course.title));
+        this.http.post<Course>(`${environment.apiUrl}/courses`, course)
+        .subscribe({
+            next: (course) => {
+                this._courses = [...this._courses, course];
+                this.coursesSubject.next(this._courses);
+                this.coursesTitlesSubject.next(this._courses.map((course)=> course.title));
+            },
+            error: (error) => {
+                console.error('Error adding course:', error);
+            },
+        });
     }
 
     getByTitle(title: string) {
@@ -66,22 +67,39 @@ export class CourseService {
         });
     }
 
-    updateCourse(updatedCourse: Course): void {
-        const index = this._courses.findIndex(
-            (course) => course.title.toLowerCase() === updatedCourse.title.toLowerCase()
-        );
-        if (index !== -1) {
-            this._courses[index] = updatedCourse; // Actualizamos el curso
-            this.coursesSubject.next([...this._courses]); // Emitimos los cambios
-            this.coursesTitlesSubject.next(this._courses.map((course) => course.title)); // Actualizamos los títulos
-        }
+    setUpdateCourse(id: string): void {
+        const course = this._courses.find((course) => course.id === id);
+        if (!course) {
+            alert('Course not found');
+            return;
+        } 
+        this.courseEdit.next(course);
     }
 
-    deleteCourse(courseToDelete: Course): void {
-        this._courses = this._courses.filter(
-            (course) => course.title.toLowerCase() !== courseToDelete.title.toLowerCase()
-        );
-        this.coursesSubject.next([...this._courses]); // Emitimos los cambios
-        this.coursesTitlesSubject.next(this._courses.map((course) => course.title)); // Actualizamos los títulos
+    updateCourse(course: Course): void {
+        this.http.put<Course>(`${environment.apiUrl}/courses/${course.id}`, course).subscribe({
+            next: (course) => {
+                this._courses = this._courses.map((c) => (c.id === course.id ? course : c));
+                this.coursesSubject.next(this._courses);
+                this.coursesTitlesSubject.next(this._courses.map((course) => course.title));
+                this.courseEdit.next(null); // Limpiamos el curso editado
+            },
+            error: (error) => {
+                console.error('Error updating course:', error);
+            },
+        })
+    }
+
+    deleteCourse(id: string): void {
+        this.http.delete<Course>(`${environment.apiUrl}/courses/${id}`).subscribe({
+            next: (course) => {
+                this._courses = this._courses.filter((course) => course.id !== id);
+                this.coursesSubject.next(this._courses);
+                this.coursesTitlesSubject.next(this._courses.map((course) => course.title));
+            },
+            error: (error) => {
+                console.error('Error deleting course:', error);
+            },
+        });
     }
 }

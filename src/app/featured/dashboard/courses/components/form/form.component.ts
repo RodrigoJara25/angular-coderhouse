@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from '../../../../../core/services/course.service';
 import { DialogComponent } from '../../../../../shared/components/dialog/dialog.component';
 
+import { v4 as uuid4 } from 'uuid';
+import { Course } from '../../interfaces/Course';
 
 @Component({
   selector: 'course-form',
@@ -13,18 +15,35 @@ import { DialogComponent } from '../../../../../shared/components/dialog/dialog.
 })
 export class FormComponent {
   formGroup: FormGroup;
+  isEdit: boolean = false;
 
   constructor(private courseService: CourseService, private fb: FormBuilder, private matDialog: MatDialog) {
 
     this.formGroup = this.fb.group({
+      id: [],
       title: [''],
       description: [''],
     });
 
-    // this.dataSource = this.students; // actualizamos el dataSource cada vez que se actualiza el arraya de estudiantes
+    this.courseService.courseEdit$.subscribe((course) => {
+      if (course) {
+        this.formGroup.patchValue({
+          id: course.id,
+          title: course.title,
+          description: course.description,
+        });
+        this.isEdit = true;
+      } else {
+        this.formGroup.reset();
+      }
+    })
+
   }
 
   submit() {
+    this.formGroup.patchValue({
+      id: this.isEdit ? this.formGroup.value.id : uuid4(),
+    });
     this.matDialog
     .open(DialogComponent, {
       data: {
@@ -37,8 +56,13 @@ export class FormComponent {
       next: (confirmed: boolean) => {
         if (confirmed) {
           console.log(this.formGroup.value);
-          this.courseService.addCourse(this.formGroup.value);
+          if (this.isEdit) {
+            this.courseService.updateCourse(this.formGroup.value);
+          } else {
+            this.courseService.addCourse(this.formGroup.value);
+          }
           this.formGroup.reset();
+          this.isEdit = false;
         }
       },
       error: (error) => {
