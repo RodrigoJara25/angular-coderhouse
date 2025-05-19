@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from '../../../../../core/services/course.service';
 import { DialogComponent } from '../../../../../shared/components/dialog/dialog.component';
@@ -21,8 +21,8 @@ export class FormComponent {
 
     this.formGroup = this.fb.group({
       id: [],
-      title: [''],
-      description: [''],
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
     });
 
     this.courseService.courseEdit$.subscribe((course) => {
@@ -41,6 +41,11 @@ export class FormComponent {
   }
 
   submit() {
+    if (this.formGroup.invalid) {
+      console.error('Form is invalid:', this.formGroup.errors);
+      return;
+    }
+
     this.formGroup.patchValue({
       id: this.isEdit ? this.formGroup.value.id : uuid4(),
     });

@@ -1,14 +1,27 @@
 <form [formGroup]="formGroup" (ngSubmit)="submit()">
-        <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input matInput formControlName="title">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Description</mat-label>
-            <input matInput formControlName="description">
-        </mat-form-field>
+    <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+        <mat-error *ngIf="formGroup.get('title')?.hasError('required') && formGroup.get('title')?.touched">
+            El título es obligatorio.
+        </mat-error>
+        <mat-error *ngIf="formGroup.get('title')?.hasError('minlength') && formGroup.get('title')?.touched">
+            El título debe tener al menos 3 caracteres.
+        </mat-error>
+    </mat-form-field>
 
-    <button mat-flat-button type="submit">
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description">
+        <mat-error *ngIf="formGroup.get('description')?.hasError('required') && formGroup.get('description')?.touched">
+            La descripción es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="formGroup.get('description')?.hasError('minlength') && formGroup.get('description')?.touched">
+            La descripción debe tener al menos 10 caracteres.
+        </mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" [disabled]="formGroup.invalid">
         {{ isEdit ? 'Editar' : 'Crear' }} Curso
     </button>
 </form>
