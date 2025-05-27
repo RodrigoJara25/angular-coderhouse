@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { User } from '../../featured/auth/interfaces/User';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { RootState } from '../store';
+import { setAuthUser, unsetAuthUser } from '../store/auth/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +28,7 @@ export class AuthService {
     }
   ]
 
-  constructor() { }
+  constructor(private store: Store<RootState>) { }
 
   login (email: string, password: string): boolean {
     // Chequear que los datos sean correctos
@@ -33,6 +36,13 @@ export class AuthService {
     if (!user) {
       return false;
     }
+
+    this.store.dispatch(
+      setAuthUser({
+        payload: user,
+
+      })
+    );
 
     this._authUser.next(user);
 
@@ -53,5 +63,8 @@ export class AuthService {
 
   logout() {
     this._authUser.next(null);
+    this.store.dispatch(
+      unsetAuthUser()
+    );
   }
 }
