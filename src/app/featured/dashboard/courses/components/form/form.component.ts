@@ -6,6 +6,9 @@ import { DialogComponent } from '../../../../../shared/components/dialog/dialog.
 
 import { v4 as uuid4 } from 'uuid';
 import { Course } from '../../interfaces/Course';
+import { RootState } from '../../../../../core/store';
+import { Store } from '@ngrx/store';
+import { CoursesActions } from '../../store/courses.actions';
 
 @Component({
   selector: 'course-form',
@@ -17,7 +20,7 @@ export class FormComponent {
   formGroup: FormGroup;
   isEdit: boolean = false;
 
-  constructor(private courseService: CourseService, private fb: FormBuilder, private matDialog: MatDialog) {
+  constructor(private courseService: CourseService, private fb: FormBuilder, private matDialog: MatDialog, private store: Store<RootState>) {
 
     this.formGroup = this.fb.group({
       id: [],
@@ -50,29 +53,34 @@ export class FormComponent {
       id: this.isEdit ? this.formGroup.value.id : uuid4(),
     });
     this.matDialog
-    .open(DialogComponent, {
-      data: {
-        title: 'Confirmación',
-        content: '¿Estás seguro de que deseas guardar este curso?'
-      }
-    })
-    .afterClosed()
-    .subscribe({
-      next: (confirmed: boolean) => {
-        if (confirmed) {
-          console.log(this.formGroup.value);
-          if (this.isEdit) {
-            this.courseService.updateCourse(this.formGroup.value);
-          } else {
-            this.courseService.addCourse(this.formGroup.value);
-          }
-          this.formGroup.reset();
-          this.isEdit = false;
+      .open(DialogComponent, {
+        data: {
+          title: 'Confirmación',
+          content: '¿Estás seguro de que deseas guardar este curso?'
         }
-      },
-      error: (error) => {
-        console.error('Error: ', error);
-      },
+      })
+      .afterClosed()
+      .subscribe({
+        next: (confirmed: boolean) => {
+          if (confirmed) {
+            console.log(this.formGroup.value);
+            if (this.isEdit) {
+              this.courseService.updateCourse(this.formGroup.value);
+            } else {
+              // this.courseService.addCourse(this.formGroup.value);
+              this.store.dispatch(
+                CoursesActions.addCourse({course: this.formGroup.value})
+              )
+            }
+            this.formGroup.reset();
+            this.isEdit = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error: ', error);
+        },
     })
   }
+
+  
 }

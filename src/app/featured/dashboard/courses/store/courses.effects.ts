@@ -27,6 +27,8 @@ export class CoursesEffects {
   //   );
   // });
   loadCoursess$;
+  addCourse$;
+  deleteCourse$;
 
   constructor(private actions$: Actions, private coursesService: CourseService) {
     console.log('Constructor de CoursesEffects ejecutado');
@@ -49,8 +51,43 @@ export class CoursesEffects {
         )
       )
     );
+
+    this.addCourse$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(CoursesActions.addCourse),
+        concatMap((action)=>
+          this.coursesService.addCourse(action.course).pipe(
+            map((course) => {
+              return CoursesActions.addCourseSuccess({ course });
+            }),
+            catchError((error) => {
+              return [CoursesActions.addCourseFailure({ error })];
+            })
+          )
+        )
+      )
+    })
+
+    this.deleteCourse$ = createEffect(() => {
+      return this.actions$.pipe(
+        ofType(CoursesActions.deleteCourse),
+        concatMap(({ id }) =>{
+          return this.coursesService.deleteCourse(id).pipe(
+            map(() => {
+              return CoursesActions.deleteCourseSuccess({ id: id });
+            }),
+            catchError((error) => {
+              console.log('Error deleting course:', error);
+              return [CoursesActions.deleteCourseFailure({ error })];
+            })
+          );
+        })
+      );
+    });
+
+
   }
-  
+
 
   // constructor(private actions$: Actions, private coursesService: CourseService) 
   // {

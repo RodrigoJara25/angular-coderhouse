@@ -41,21 +41,8 @@ export class CourseService {
     });
   }
 
-  addCourse(course: Course): void {
-    this.http.post<Course>(`${environment.apiUrl}/courses`, course)
-      .subscribe({
-        next: (newCourse) => {
-          this.courses$.pipe(take(1)).subscribe(courses => {
-            const updated = [...courses, newCourse];
-            this.coursesSubject.next(updated);
-            this.coursesTitlesSubject.next(updated.map(c => c.title));
-            this.store.dispatch(CoursesActions.loadCourses());
-          });
-        },
-        error: (error) => {
-          console.error('Error adding course:', error);
-        },
-      });
+  addCourse(course: Course): Observable<Course> {
+    return this.http.post<Course>(`${environment.apiUrl}/courses`, course)
   }
 
   getByTitle(title: string): Observable<Course> {
@@ -122,19 +109,7 @@ export class CourseService {
     });
   }
 
-  deleteCourse(id: string): void {
-    this.http.delete<Course>(`${environment.apiUrl}/courses/${id}`).subscribe({
-      next: () => {
-        this.courses$.pipe(take(1)).subscribe(courses => {
-          const updated = courses.filter(course => course.id !== id);
-          this.coursesSubject.next(updated);
-          this.coursesTitlesSubject.next(updated.map(c => c.title));
-          this.store.dispatch(CoursesActions.loadCourses());
-        });
-      },
-      error: (error) => {
-        console.error('Error deleting course:', error);
-      },
-    });
+  deleteCourse(id: string) {
+    return this.http.delete<Course>(`${environment.apiUrl}/courses/${id}`)
   }
 }

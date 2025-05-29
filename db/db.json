@@ -43,6 +43,16 @@
       "id": "d10cfc02-350c-4f5c-b420-5bc2577742fa",
       "title": "Node js",
       "description": "Curso de Node.js con Typescript y Express"
+    },
+    {
+      "id": "3eea9d65-f8f9-43a8-84c0-9de112a3f122",
+      "title": "Laravel",
+      "description": "Framework con PHP de Back y Front"
+    },
+    {
+      "id": "e224c2ab-8ff3-44d9-9a88-2ed75340da8d",
+      "title": "ux/ui",
+      "description": "Curso de experiencia de usuario"
     }
   ],
   "students": [

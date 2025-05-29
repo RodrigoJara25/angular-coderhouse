@@ -7,6 +7,7 @@ import { RootState } from '../../../../../core/store';
 import { Observable } from 'rxjs';
 import { selectCourses, selectError, selectIsLoading } from '../../store/courses.selectors';
 import { CoursesActions } from '../../store/courses.actions';
+import { DialogComponent } from '../../../../../shared/components/dialog/dialog.component';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class TableComponent implements OnInit {
   error$: Observable<any>;
 
   // Llamamos y usamos el servicio que contiene el array de estudiantes
-  constructor(private courseService: CourseService, private dialog: MatDialog, private store: Store<RootState>) {
+  constructor(private courseService: CourseService, private store: Store<RootState>, private matDialog: MatDialog) {
     // this.dataSource = this.studentsService.getStudents();
     this.courses$ = this.store.select(selectCourses);
     this.isLoading$ = this.store.select(selectIsLoading);
@@ -69,6 +70,23 @@ export class TableComponent implements OnInit {
   }
 
   deleteCourse(id: string) {
-    this.courseService.deleteCourse(id); // Eliminar en el servicio
+    this.matDialog
+      .open(DialogComponent, {
+        data: {
+          title: 'Confirmación',
+          content: '¿Estás seguro de que deseas eliminar este curso?'
+        }
+      }).afterClosed()
+      .subscribe({
+        next: (confirmed: boolean) => {
+          if (confirmed) {
+            this.store.dispatch(CoursesActions.deleteCourse({ id })); // Disparamos la acción para eliminar el curso
+          }
+        },
+        error: (error) => {
+          console.error('Error al abrir el diálogo de confirmación:', error);
+        }
+      })
+    // this.courseService.deleteCourse(id); // Eliminar en el servicio
 }
 }

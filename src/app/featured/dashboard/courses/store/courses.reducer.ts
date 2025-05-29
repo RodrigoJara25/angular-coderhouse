@@ -41,6 +41,48 @@ export const reducer = createReducer(
     isLoading: false,
     error,
   })),
+
+  on(CoursesActions.addCourse, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }),
+
+  on(CoursesActions.addCourseSuccess, (state, { course }) => {
+    return {
+      ...state,
+      isLoading: false,
+      courses: [...state.courses, course],
+    }
+  }),
+
+  on(CoursesActions.addCourseFailure, (state, { error }) => ({
+      ...state,
+      isLoading: false,
+      error,
+  })),
+
+  on(CoursesActions.deleteCourse, (state) => {
+    return {
+      ...state,
+      isLoading: true,
+    }
+  }),
+
+  on(CoursesActions.deleteCourseSuccess, (state, { id }) => {
+    return {
+      ...state,
+      isLoading: false,
+      courses: state.courses.filter(course => course.id !== id),
+    };
+  }),
+
+  on(CoursesActions.deleteCourseFailure, (state, { error }) => ({
+    ...state,
+    isLoading: false,
+    error,
+  })),
 );
 
 export const courseFeature = createFeature({
